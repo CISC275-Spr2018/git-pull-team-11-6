@@ -78,7 +78,7 @@ public class Animation4Thread extends JFrame {
     private BufferedImage createImage(){
     	BufferedImage bufferedImage;
     	try {
-    		bufferedImage = ImageIO.read(new File("images/orc/orc_forward_southeast.png"));
+    		bufferedImage = ImageIO.read(new File("./../images/orc/orc_forward_southeast.png"));
     		return bufferedImage;
     	} catch (IOException e) {
     		e.printStackTrace();
