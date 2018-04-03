@@ -27,12 +27,14 @@ public class Animation4Thread extends JFrame {
     final int frameStartSize = 800;
     final int drawDelay = 30; //msec
     
+    Model model = new Model(frameStartSize, frameStartSize, picSize, picSize);
     DrawPanel drawPanel = new DrawPanel();
     Action drawAction;
 
     public Animation4Thread() {
     	drawAction = new AbstractAction(){
     		public void actionPerformed(ActionEvent e){
+                model.updateLocationAndDirection();
     			drawPanel.repaint();
     		}
     	};
@@ -57,7 +59,7 @@ public class Animation4Thread extends JFrame {
 			super.paintComponent(g);
 			g.setColor(Color.gray);
 	    	picNum = (picNum + 1) % frameCount;
-	    	g.drawImage(pics[picNum], xloc+=xIncr, yloc+=yIncr, Color.gray, this);
+	    	g.drawImage(pics[picNum], model.getX(), model.getY(), Color.gray, this);
 		}
 
 		public Dimension getPreferredSize() {

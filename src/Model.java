@@ -20,7 +20,7 @@ class Model{
 
     // orc increment rate
     final int xIncr = 8;
-    final int yIncr = 8;
+    final int yIncr = 5;
 
     // orc's current position on the board
     int xloc = 0;
