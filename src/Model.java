@@ -23,8 +23,8 @@ class Model{
     final int yIncr = 5;
 
     // orc's current position on the board
-    int xloc = 0;
-    int yloc = 0;
+    int xloc = 100;
+    int yloc = 100;
     Direction dir;
     
     
