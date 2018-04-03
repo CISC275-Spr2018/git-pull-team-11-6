@@ -13,7 +13,8 @@ import javax.swing.JPanel;
 class DrawPanel extends JPanel {
     
     final int frameCount = 10;
-    BufferedImage[] pics;
+    final int imageCount = 8;
+    BufferedImage[][] pics;
     
 
     final int picSize = 165;
@@ -26,10 +27,16 @@ class DrawPanel extends JPanel {
     
     public DrawPanel(){
         
-        BufferedImage img = createImage();
-        pics = new BufferedImage[frameCount];//get this dynamically
-    	for(int i = 0; i < frameCount; i++)
-    		pics[i] = img.getSubimage(picSize*i, 0, picSize, picSize);
+    	pics = new BufferedImage[imageCount][frameCount];
+        
+        int j = 0;
+        for(Direction dir:Direction.values()){
+            BufferedImage img = createImage("./../images/orc/orc_forward_" + dir.getName() + ".png");
+            for(int i = 0; i < frameCount; i++) {
+                pics[j][i] = img.getSubimage(picSize*i, 0, picSize, picSize);
+            }
+            j++;
+        }
         
     }
     
@@ -37,9 +44,10 @@ class DrawPanel extends JPanel {
 
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.setColor(Color.gray);
-        picNum = (picNum + 1) % frameCount;
-        g.drawImage(pics[picNum], this.xloc, this.yloc, Color.gray, this);
+        //g.setColor(Color.gray);
+        //picNum = (picNum + 1) % frameCount;
+        //g.drawImage(pics[picNum], this.xloc, this.yloc, Color.gray, this);
+        g.drawImage(pics[dir.getIndex()][(picNum++) % frameCount], this.xloc, this.yloc, Color.gray, this);
     }
 
     public Dimension getPreferredSize() {
@@ -65,11 +73,12 @@ class DrawPanel extends JPanel {
     
     public int getImageHeight(){return picSize;}
     
+    
         //Read image from file and return
-    public BufferedImage createImage(){
+    public BufferedImage createImage(String filename){
     	BufferedImage bufferedImage;
     	try {
-    		bufferedImage = ImageIO.read(new File("./../images/orc/orc_forward_southeast.png"));
+    		bufferedImage = ImageIO.read(new File(filename));
     		return bufferedImage;
     	} catch (IOException e) {
     		e.printStackTrace();
