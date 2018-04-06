@@ -14,7 +14,8 @@ public enum Direction {
 	private String name = null;
 	private int index;
 	private String imageName;
-	
+	private static Direction[] directions = values();
+    
 	private Direction(String s, int i){
 		name = s;
 		index = i;
@@ -31,4 +32,8 @@ public enum Direction {
 	public String getImageName() {
 		return imageName;
 	}
+    
+    public Direction next(){
+        return directions[(this.ordinal()+1) % directions.length];
+    }//next
 }

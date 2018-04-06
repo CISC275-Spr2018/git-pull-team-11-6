@@ -14,14 +14,19 @@ import java.awt.event.KeyEvent;
 import javax.swing.AbstractButton;
 import java.awt.FlowLayout;
 
-public class Controller extends JFrame implements ActionListener {
+public class Controller extends JFrame{
     
     Action drawAction;
     final int drawDelay = 30; //msec
 
     // button-related vars
     private JButton pauseButton;
+    private JButton dirButton;
     boolean paused = false;
+    boolean changeDir = false;
+    
+    
+    
     
     View view = new View();
     Model model = new Model(view.getWidth(), view.getHeight(), view.getImageWidth(), view.getImageHeight());
@@ -44,9 +49,34 @@ public class Controller extends JFrame implements ActionListener {
         // ImageIcon pauseIcon = new ImageIcon("./../images/pause.png", "PAUSE");
 
         // create buttons
-        pauseButton = new JButton("PAUSE");
-        // pauseButton = new JButton("PAUSE", pauseIcon);
+        pauseButton = new JButton(new AbstractAction("PAUSE"){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // pause/unpause on click
+                if (paused) {
+                    paused = !paused;
+                    System.out.println("playing");
+                    pauseButton.setText("PAUSE");
+                }//if
+                else if (!paused) {
+                    paused = !paused;
+                    System.out.println("pausing");
+                    pauseButton.setText("PLAY");
+                }//else if
 
+            }//actionPerformed
+        });
+
+        dirButton = new JButton(new AbstractAction("DIRECTION"){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                    System.out.println("Changing direction");
+                    System.out.println(model.dir.getName());
+                    model.dir = model.dir.next();
+                    System.out.println(model.dir.getName());
+            }//actionPerformed
+        });
+        
         // position on board (needed or not?)
         // playButton.setVerticalTextPosition(AbstractButton.CENTER);
         // playButton.setHorizontalTextPosition(AbstractButton.LEADING); //aka LEFT, for left-to-right locales
@@ -56,14 +86,17 @@ public class Controller extends JFrame implements ActionListener {
         // not sure what this does...
         pauseButton.setMnemonic(KeyEvent.VK_E);
 
+        dirButton.setMnemonic(KeyEvent.VK_E);
+        
         // set action from button
         // pauseButton.setActionCommand("pause");		// **MAY BE NEEDED LATER ON...**
 
-        pauseButton.addActionListener(this);
-
         // for some reason, view has to be added AFTER pauseButton to be able to see the button...
         add(pauseButton);
+        add(dirButton);
         add(view);
+        
+        
         
         // add the settings
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -75,24 +108,12 @@ public class Controller extends JFrame implements ActionListener {
     }
 
     // actively listen for button events
-    public void actionPerformed(ActionEvent e) {
-        // if ("pauseOrc".equals(e.getActionCommand())) {
-            // pauseButton.setEnabled(true);		// i think this "grays out" the button (can't be used)
 
-    	// pause/unpause on click
-    	if (paused) {
-    		paused = !paused;
-    		System.out.println("playing");
-    		pauseButton.setText("PAUSE");
-    	}
-    	else if (!paused) {
-    		paused = !paused;
-    		System.out.println("pausing");
-    		pauseButton.setText("PLAY");
-    	}
 
-    }
-
+    public void changeDirButton(){
+        model.getDirect().ordinal();
+    }//changeDirButton
+    
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable(){
 			public void run(){
