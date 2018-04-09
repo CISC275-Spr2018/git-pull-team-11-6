@@ -143,8 +143,8 @@ public class Controller extends JFrame{
         buttonContainer = new JPanel();
        // buttonContainer.setBackground(view.buttonBarBG);
 
-        add(pauseButton);
-        add(dirButton);
+        view.add(pauseButton);
+        view.add(dirButton);
         // buttonContainer.add(EButton);
         // buttonContainer.add(WButton);
         // buttonContainer.add(SButton);
