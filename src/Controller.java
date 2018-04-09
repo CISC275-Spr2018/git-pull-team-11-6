@@ -40,7 +40,7 @@ public class Controller extends JFrame{
                 // update based on whether the game is "paused"
                 if (!model.paused) {
                     model.updateLocationAndDirection();
-                    view.update(model.getX(), model.getY(), model.getDirect());
+                    view.update(model.getX(), model.getY(), model.getDirect(), model.getMovement());
                 }//if
             }//actionPerformed
         };//AbastractAction
