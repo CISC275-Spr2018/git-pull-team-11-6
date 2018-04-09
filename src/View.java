@@ -24,6 +24,9 @@ class View extends JPanel {
     int yloc = 100;
     Direction dir;
     int picNum = 0;
+
+    Color bg = Color.GRAY;
+    Color buttonBarBG = Color.RED;
     
     public View(){
         
@@ -37,6 +40,8 @@ class View extends JPanel {
             }
             j++;
         }
+
+        setBackground(bg);
         
     }
     

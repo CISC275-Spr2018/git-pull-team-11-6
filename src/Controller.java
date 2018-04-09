@@ -1,4 +1,5 @@
 
+import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
@@ -13,6 +14,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import javax.swing.AbstractButton;
 import java.awt.FlowLayout;
+import javax.swing.JPanel;
 
 public class Controller extends JFrame{
     
@@ -20,13 +22,13 @@ public class Controller extends JFrame{
     final int drawDelay = 30; //msec
 
     // button-related vars
+    private JPanel buttonContainer;
     private JButton pauseButton;
     private JButton dirButton;
     private JButton EButton;
     private JButton WButton;
     private JButton NButton;
     private JButton SButton;
-    boolean paused = false;
 
     View view = new View();
     Model model = new Model(view.getWidth(), view.getHeight(), view.getImageWidth(), view.getImageHeight());
@@ -35,7 +37,7 @@ public class Controller extends JFrame{
     	drawAction = new AbstractAction(){
     		public void actionPerformed(ActionEvent e){
     			// update based on whether the game is "paused"
-    			if (!paused) {
+    			if (!model.paused) {
 	                model.updateLocationAndDirection();
 	    			view.update(model.getX(), model.getY(), model.getDirect());
 	    		}//if
@@ -53,13 +55,13 @@ public class Controller extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 // pause/unpause on click
-                if (paused) {
-                    paused = !paused;
+                if (model.paused) {
+                    model.paused = !model.paused;
                     System.out.println("playing");
                     pauseButton.setText("PAUSE");
                 }//if
-                else if (!paused) {
-                    paused = !paused;
+                else{
+                    model.paused = !model.paused;
                     System.out.println("pausing");
                     pauseButton.setText("PLAY");
                 }//else if
@@ -127,12 +129,16 @@ public class Controller extends JFrame{
 
         // for some reason, view has to be added AFTER pauseButton to be able to see the button...
         
-        add(pauseButton);
-        add(dirButton);
-        add(EButton);
-        add(WButton);
-        add(SButton);
-        add(NButton);
+        buttonContainer = new JPanel();
+        buttonContainer.setBackground(view.buttonBarBG);
+
+        buttonContainer.add(pauseButton);
+        buttonContainer.add(dirButton);
+        buttonContainer.add(EButton);
+        buttonContainer.add(WButton);
+        buttonContainer.add(SButton);
+        buttonContainer.add(NButton);
+        view.add(buttonContainer);
         add(view);
         
         // add the settings

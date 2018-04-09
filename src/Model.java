@@ -26,6 +26,8 @@ class Model{
     int xloc = 100;
     int yloc = 100;
     Direction dir;
+
+    boolean paused = false;
     
     
     public Model(int screenWidth, int screenHeight, int imageWidth, int imageHeight){
