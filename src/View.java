@@ -46,7 +46,7 @@ class View extends JPanel {
         
         j = 0;
         for(Direction dir:Direction.values()){
-            BufferedImage img = createImage("./../images/orc/orc_fire_" + dir.getName() + ".png");
+            BufferedImage img = createImage("./../images/orc/orc_jump_" + dir.getName() + ".png");
             for(int i = 0; i < jumpFrameCount; i++) {
                 jumpPics[j][i] = img.getSubimage(picSize*i, 0, picSize, picSize);
             }
@@ -56,8 +56,9 @@ class View extends JPanel {
         firePics = new BufferedImage[imageCount][fireFrameCount];
         
         j = 0;
+
         for(Direction dir:Direction.values()){
-            BufferedImage img = createImage("./../images/orc/orc_jump_" + dir.getName() + ".png");
+            BufferedImage img = createImage("./../images/orc/orc_fire_" + dir.getName() + ".png");
             for(int i = 0; i < fireFrameCount; i++) {
                 firePics[j][i] = img.getSubimage(picSize*i, 0, picSize, picSize);
             }//for

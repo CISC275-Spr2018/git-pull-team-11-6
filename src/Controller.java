@@ -40,7 +40,7 @@ public class Controller extends JFrame{
                 // update based on whether the game is "paused"
                 if (!model.paused) {
                     model.updateLocationAndDirection();
-                    view.update(model.getX(), model.getY(), model.getDirect(), model.getMovement());
+                    view.update(model.getX(), model.getY(), model.getDirect());
                 }//if
             }//actionPerformed
         };//AbastractAction
@@ -141,7 +141,7 @@ public class Controller extends JFrame{
         // for some reason, view has to be added AFTER pauseButton to be able to see the button...
         
         buttonContainer = new JPanel();
-        buttonContainer.setBackground(view.buttonBarBG);
+       // buttonContainer.setBackground(view.buttonBarBG);
 
         add(pauseButton);
         add(dirButton);
@@ -173,7 +173,7 @@ public class Controller extends JFrame{
                         model.dir=Direction.EAST;
                         break;
 
-                    case (KeyEvent.VK_DOWN):
+                   case (KeyEvent.VK_DOWN):
                         model.dir=Direction.SOUTH;
                         break;
                 }
