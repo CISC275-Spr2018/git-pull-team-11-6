@@ -13,9 +13,13 @@ import javax.swing.JPanel;
 class View extends JPanel {
     
     final int frameCount = 10;
+    final int jumpFrameCount = 8;
+    final int fireFrameCount = 4;
+    
     final int imageCount = 8;
     BufferedImage[][] pics;
-    
+    BufferedImage[][] jumpPics;
+    BufferedImage[][] firePics;
 
     final int picSize = 165;
     final int frameStartSize = 800;
@@ -24,9 +28,6 @@ class View extends JPanel {
     int yloc = 100;
     Direction dir;
     int picNum = 0;
-
-    Color bg = Color.GRAY;
-    Color buttonBarBG = Color.RED;
     
     public View(){
         
@@ -40,9 +41,28 @@ class View extends JPanel {
             }
             j++;
         }
-
-        setBackground(bg);
         
+        jumpPics = new BufferedImage[imageCount][jumpFrameCount];
+        
+        j = 0;
+        for(Direction dir:Direction.values()){
+            BufferedImage img = createImage("./../images/orc/orc_fire_" + dir.getName() + ".png");
+            for(int i = 0; i < jumpFrameCount; i++) {
+                jumpPics[j][i] = img.getSubimage(picSize*i, 0, picSize, picSize);
+            }
+            j++;
+        }
+        
+        firePics = new BufferedImage[imageCount][fireFrameCount];
+        
+        j = 0;
+        for(Direction dir:Direction.values()){
+            BufferedImage img = createImage("./../images/orc/orc_jump_" + dir.getName() + ".png");
+            for(int i = 0; i < fireFrameCount; i++) {
+                firePics[j][i] = img.getSubimage(picSize*i, 0, picSize, picSize);
+            }//for
+            j++;
+        }//for
     }
     
         	
