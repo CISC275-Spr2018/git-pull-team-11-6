@@ -17,7 +17,7 @@ class View extends JPanel {
     final int fireFrameCount = 4;
     
     final int imageCount = 8;
-    BufferedImage[][] pics;
+    BufferedImage[][] runPics;
     BufferedImage[][] jumpPics;
     BufferedImage[][] firePics;
 
@@ -27,17 +27,18 @@ class View extends JPanel {
     int xloc = 100;
     int yloc = 100;
     Direction dir;
+    Movement mov;
     int picNum = 0;
     
     public View(){
         
-    	pics = new BufferedImage[imageCount][runFrameCount];
+    	runPics = new BufferedImage[imageCount][runFrameCount];
         
         int j = 0;
         for(Direction dir:Direction.values()){
             BufferedImage img = createImage("./../images/orc/orc_forward_" + dir.getName() + ".png");
             for(int i = 0; i < runFrameCount; i++) {
-                pics[j][i] = img.getSubimage(picSize*i, 0, picSize, picSize);
+                runPics[j][i] = img.getSubimage(picSize*i, 0, picSize, picSize);
             }
             j++;
         }
@@ -68,20 +69,31 @@ class View extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         //g.setColor(Color.gray);
-        //picNum = (picNum + 1) % frameCount;
-        //g.drawImage(pics[picNum], this.xloc, this.yloc, Color.gray, this);
-        g.drawImage(pics[dir.getIndex()][(picNum++) % runFrameCount], this.xloc, this.yloc, Color.gray, this);
+
+        // display whatever action the orc is doing
+        switch (mov.getName()) {
+            case ("run"):
+                g.drawImage(runPics[dir.getIndex()][(picNum++) % runFrameCount], this.xloc, this.yloc, Color.gray, this);
+                break;
+            case ("jump"):
+                g.drawImage(jumpPics[dir.getIndex()][(picNum++) % jumpFrameCount], this.xloc, this.yloc, Color.gray, this);
+                break;
+            case ("fire"):
+                g.drawImage(firePics[dir.getIndex()][(picNum++) % fireFrameCount], this.xloc, this.yloc, Color.gray, this);
+                break;
+        }
     }
 
     public Dimension getPreferredSize() {
         return new Dimension(frameStartSize, frameStartSize);
     }
     
-    public void update(int xCoor, int yCoor, Direction direction){
+    public void update(int xCoor, int yCoor, Direction direction, Movement movement){
     	// assign new position attributes
     	this.xloc = xCoor;
     	this.yloc = yCoor;
     	this.dir = direction;
+        this.mov = movement;
 
     	// redraw board
     	repaint();

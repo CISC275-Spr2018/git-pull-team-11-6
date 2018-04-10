@@ -29,6 +29,12 @@ class Model{
 
     boolean paused = false;
     Movement movementType = Movement.RUN;
+    int movementCounter = 0;
+
+    // i just copied these var's from View.java, not sure if this is the best way to do it...
+    final int runFrameCount = 10;
+    final int jumpFrameCount = 8;
+    final int fireFrameCount = 4;
     
     
     public Model(int screenWidth, int screenHeight, int imageWidth, int imageHeight){
@@ -44,6 +50,27 @@ class Model{
     
     public void updateLocationAndDirection(){
         // check orc orientation and modify accordingly
+
+        if (movementType == Movement.FIRE) {
+            if (movementCounter >= fireFrameCount) {
+                movementCounter = 0;
+                changeMovement(Movement.RUN);
+            }
+            else {
+                movementCounter++;
+            }
+            return;
+        }
+        else if (movementType == Movement.JUMP) {
+            if (movementCounter >= jumpFrameCount) {
+                movementCounter = 0;
+                changeMovement(Movement.RUN);
+            }
+            else {
+                movementCounter++;
+            }
+        }
+
         switch (dir) {
 
             case NORTH:
@@ -152,7 +179,6 @@ class Model{
                 }
                 break;
         }
-    
     }
     
     
@@ -163,5 +189,9 @@ class Model{
     public Direction getDirect(){return dir;}
 
     public Movement getMovement(){return movementType;}
+
+    public void changeMovement(Movement m) {
+        this.movementType = m;
+    }
     
 }
