@@ -28,7 +28,7 @@ class Model{
     Direction dir;
 
     boolean paused = false;
-    String movementType = "forward";
+    Movement movementType = Movement.RUN;
     
     
     public Model(int screenWidth, int screenHeight, int imageWidth, int imageHeight){
@@ -162,6 +162,6 @@ class Model{
     
     public Direction getDirect(){return dir;}
 
-    public String getMovement(){return movementType;}
+    public Movement getMovement(){return movementType;}
     
 }

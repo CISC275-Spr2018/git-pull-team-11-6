@@ -12,7 +12,7 @@ import javax.swing.JPanel;
 @SuppressWarnings("serial")
 class View extends JPanel {
     
-    final int frameCount = 10;
+    final int runFrameCount = 10;
     final int jumpFrameCount = 8;
     final int fireFrameCount = 4;
     
@@ -31,12 +31,12 @@ class View extends JPanel {
     
     public View(){
         
-    	pics = new BufferedImage[imageCount][frameCount];
+    	pics = new BufferedImage[imageCount][runFrameCount];
         
         int j = 0;
         for(Direction dir:Direction.values()){
             BufferedImage img = createImage("./../images/orc/orc_forward_" + dir.getName() + ".png");
-            for(int i = 0; i < frameCount; i++) {
+            for(int i = 0; i < runFrameCount; i++) {
                 pics[j][i] = img.getSubimage(picSize*i, 0, picSize, picSize);
             }
             j++;
@@ -56,7 +56,6 @@ class View extends JPanel {
         firePics = new BufferedImage[imageCount][fireFrameCount];
         
         j = 0;
-
         for(Direction dir:Direction.values()){
             BufferedImage img = createImage("./../images/orc/orc_fire_" + dir.getName() + ".png");
             for(int i = 0; i < fireFrameCount; i++) {
@@ -66,14 +65,12 @@ class View extends JPanel {
         }//for
     }
     
-        	
-
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         //g.setColor(Color.gray);
         //picNum = (picNum + 1) % frameCount;
         //g.drawImage(pics[picNum], this.xloc, this.yloc, Color.gray, this);
-        g.drawImage(pics[dir.getIndex()][(picNum++) % frameCount], this.xloc, this.yloc, Color.gray, this);
+        g.drawImage(pics[dir.getIndex()][(picNum++) % runFrameCount], this.xloc, this.yloc, Color.gray, this);
     }
 
     public Dimension getPreferredSize() {
@@ -88,7 +85,6 @@ class View extends JPanel {
 
     	// redraw board
     	repaint();
-        
     }
     
     public int getWidth(){return frameStartSize;}

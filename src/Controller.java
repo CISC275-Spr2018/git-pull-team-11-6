@@ -58,15 +58,14 @@ public class Controller extends JFrame{
                 // pause/unpause on click
                 if (model.paused) {
                     model.paused = !model.paused;
-                    System.out.println("playing");
                     pauseButton.setText("PAUSE");
+                    // recenter focus to allow keyboard input (only makes sense to allow ctrl after resuming game)
+                    requestFocusInWindow();
                 }//if
                 else{
                     model.paused = !model.paused;
-                    System.out.println("pausing");
                     pauseButton.setText("PLAY");
                 }//else if
-                requestFocusInWindow();
             }//actionPerformed
         });//JButton pauseButton
 
@@ -87,14 +86,6 @@ public class Controller extends JFrame{
                     System.out.println("Changing direction to EAST");
                     model.dir = Direction.EAST;
             }//actionPerformed
-            // @Override
-            // public void keyPressed(KeyEvent e) {
-            //     int key = e.getKeyCode();
-
-            //     if (key == KeyEvent.VK_LEFT) {
-            //         model.dir=Direction.EAST;
-            //     }
-            // }
         });//JButton dirButton
         
         WButton = new JButton(new AbstractAction("WEST"){
@@ -130,10 +121,6 @@ public class Controller extends JFrame{
         // playButton.setHorizontalTextPosition(AbstractButton.LEADING); //aka LEFT, for left-to-right locales
         // pauseButton.setVerticalTextPosition(AbstractButton.BOTTOM);
         // pauseButton.setHorizontalTextPosition(AbstractButton.CENTER);
-
-        // not sure what this does...
-        //pauseButton.setMnemonic(KeyEvent.VK_P);
-        //dirButton.setMnemonic(KeyEvent.VK_D);
         
         // set action from button
         // pauseButton.setActionCommand("pause");       // **MAY BE NEEDED LATER ON...**
