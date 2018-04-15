@@ -7,6 +7,12 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
+import java.awt.event.KeyListener;
+import java.awt.event.KeyEvent;
+import javax.swing.AbstractAction;
+import javax.swing.AbstractButton;
+import javax.swing.JButton;
+import java.awt.event.ActionEvent;
 
 
 @SuppressWarnings("serial")
@@ -26,9 +32,20 @@ class View extends JPanel {
     
     int xloc = 100;
     int yloc = 100;
-    Direction dir;
-    Movement mov;
+    Direction dir = Direction.NORTHEAST;
+    Movement movementType = Movement.RUN;;
+    boolean paused = false;
     int picNum = 0;
+
+    boolean dirChange = false;
+    boolean movChange = false;
+
+
+    // button-related 
+    private JPanel buttonContainer;
+    private JButton pauseButton;
+    private JButton dirButton;
+
     
     public View(){
         
@@ -64,6 +81,93 @@ class View extends JPanel {
             }//for
             j++;
         }//for
+
+        // create buttons
+        pauseButton = new JButton(new AbstractAction("PAUSE"){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // pause/unpause on click
+                if (paused) {
+                    paused = !paused;
+                    pauseButton.setText("PAUSE");
+                    // recenter focus to allow keyboard input (only makes sense to allow ctrl after resuming game)
+                    requestFocusInWindow();
+                }//if
+                else{
+                    paused = !paused;
+                    pauseButton.setText("PLAY");
+                }//else if
+            }//actionPerformed
+        });//JButton pauseButton
+
+        dirButton = new JButton(new AbstractAction("DIRECTION"){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                    //Switching direction.
+                    dir = dir.next();
+                    dirChange = true;
+                    requestFocusInWindow();
+            }//actionPerformed
+        });//JButton dirButton
+
+        buttonContainer = new JPanel();
+        buttonContainer.add(pauseButton);
+        buttonContainer.add(dirButton);
+
+        add(buttonContainer);
+
+        setFocusable(true);
+        addKeyListener( new KeyListener() {
+
+            @Override
+            public void keyTyped( KeyEvent e ) {}
+
+            @Override
+            public void keyPressed( KeyEvent e ) {
+                int key = e.getKeyCode();
+
+                switch (key) {
+                    case (KeyEvent.VK_LEFT):
+                        dir=Direction.WEST;
+                        dirChange = true;
+                        break;
+                    
+                    case (KeyEvent.VK_UP):
+                        dir=Direction.NORTH;
+                        dirChange = true;
+                        break;
+
+                    case (KeyEvent.VK_RIGHT):
+                        dir=Direction.EAST;
+                        dirChange = true;
+                        break;
+
+                   case (KeyEvent.VK_DOWN):
+                        dir=Direction.SOUTH;
+                        dirChange = true;
+                        break;
+                }
+
+                if (key == KeyEvent.VK_F) {
+                    // do stuff
+                    movementType = Movement.FIRE; 
+                    movChange = true;
+
+                }
+                else if (key == KeyEvent.VK_J) {
+                    // do stuff
+                    movementType = Movement.JUMP;
+                    movChange = true;
+                }
+            }
+
+            @Override
+            public void keyReleased( KeyEvent e ) {}
+
+        } );
+
+
+
     }
     
     protected void paintComponent(Graphics g) {
@@ -71,7 +175,7 @@ class View extends JPanel {
         //g.setColor(Color.gray);
 
         // display whatever action the orc is doing
-        switch (mov.getName()) {
+        switch (movementType.getName()) {
             case ("run"):
                 g.drawImage(runPics[dir.getIndex()][(picNum++) % runFrameCount], this.xloc, this.yloc, Color.gray, this);
                 break;
@@ -89,14 +193,25 @@ class View extends JPanel {
     }
     
     public void update(int xCoor, int yCoor, Direction direction, Movement movement){
-    	// assign new position attributes
-    	this.xloc = xCoor;
-    	this.yloc = yCoor;
-    	this.dir = direction;
-        this.mov = movement;
+    	
+        if(!paused){
+            // assign new position attributes
+            this.xloc = xCoor;
+            this.yloc = yCoor;
 
-    	// redraw board
-    	repaint();
+            if(!dirChange){
+                this.dir = direction;
+            }
+
+            if(!movChange){
+                this.movementType = movement;
+            }
+            
+            // redraw board
+            repaint();
+
+        }
+        
     }
     
     public int getWidth(){return frameStartSize;}

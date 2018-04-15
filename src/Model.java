@@ -27,7 +27,6 @@ class Model{
     int yloc = 100;
     Direction dir;
 
-    boolean paused = false;
     Movement movementType = Movement.RUN;
     int movementCounter = 0;
 
@@ -48,136 +47,143 @@ class Model{
         
     }
     
-    public void updateLocationAndDirection(){
+    public void updateLocationAndDirection(boolean paused){
         // check orc orientation and modify accordingly
 
-        if (movementType == Movement.FIRE) {
-            if (movementCounter >= fireFrameCount) {
-                movementCounter = 0;
-                changeMovement(Movement.RUN);
+        // this.dir = dir;
+        // this.movementType = movementType;
+
+        if(!paused){
+
+            if (movementType == Movement.FIRE) {
+                if (movementCounter >= fireFrameCount) {
+                    movementCounter = 0;
+                    changeMovement(Movement.RUN);
+                }
+                else {
+                    movementCounter++;
+                }
+                return;
             }
-            else {
-                movementCounter++;
+            else if (movementType == Movement.JUMP) {
+                if (movementCounter >= jumpFrameCount) {
+                    movementCounter = 0;
+                    changeMovement(Movement.RUN);
+                }
+                else {
+                    movementCounter++;
+                }
             }
-            return;
-        }
-        else if (movementType == Movement.JUMP) {
-            if (movementCounter >= jumpFrameCount) {
-                movementCounter = 0;
-                changeMovement(Movement.RUN);
+
+            switch (dir) {
+
+                case NORTH:
+                    if ((yloc-yIncr) <= 0) {
+                        dir = Direction.SOUTH;   // set direction/orientation S
+                    }
+                    else {
+                        yloc-=yIncr;
+                    }
+                    break;
+
+                // prev NE
+                case NORTHEAST:
+                    if ((xloc+xIncr+imageWidth) >= screenWidth) {
+                        
+                        dir = Direction.NORTHWEST;   // set direction/orientation NW 
+                    }
+                    else if ((yloc-yIncr) <= 0) {
+                        
+                        dir = Direction.SOUTHEAST;   // set direction/orientation SE
+                    }
+                    else {
+                        xloc+=xIncr;
+                        yloc-=yIncr;
+                    }
+                    break;
+
+                // prev E
+                case EAST:
+                    if ((xloc+xIncr+imageWidth) >= screenWidth) {
+                        
+                        dir = Direction.WEST;   // set direction/orientation W
+                    }
+                    else {
+                        xloc+=xIncr;
+                    }
+                    break;
+
+                // prev SE
+                case SOUTHEAST:
+                    if ((xloc+xIncr+imageWidth) >= screenWidth) {
+                        
+                        dir = Direction.SOUTHWEST;   // set direction/orientation SW
+                    }
+                    else if ((yloc+yIncr+imageHeight) >= screenHeight) {
+                        
+                        dir = Direction.NORTHEAST;   // set direction/orientation NE
+                    }
+                    else {
+                        xloc+=xIncr;
+                        yloc+=yIncr;
+                    }
+                    break;
+
+                // prev S
+                case SOUTH:
+                    if ((yloc+yIncr+imageHeight) >= screenHeight) {
+                        
+                        dir = Direction.NORTH;   // set direction/orientation N
+                    }
+                    else {
+                        yloc+=yIncr;
+                    }
+                    break;
+
+                // prev SW
+                case SOUTHWEST:
+                    if ((xloc-xIncr) <= 0) {
+                        
+                        dir = Direction.SOUTHEAST;   // set direction/orientation SE
+                    }
+                    else if ((yloc+yIncr+imageHeight) >= screenHeight) {
+                        
+                        dir = Direction.NORTHWEST;   // set direction/orientation NW
+                    }
+                    else {
+                        xloc-=xIncr;
+                        yloc+=yIncr;
+                    }
+                    break;
+
+                // prev W
+                case WEST:
+                    if ((xloc-xIncr) <= 0) {
+                        
+                        dir = Direction.EAST;   // set direction/orientation E
+                    }
+                    else {
+                        xloc-=xIncr;
+                    }
+                    break;
+
+                // prev NW
+                case NORTHWEST:
+                    if ((xloc-xIncr) <= 0) {
+                        
+                        dir = Direction.NORTHEAST;   // set direction/orientation NE
+                    }
+                    else if ((yloc-yIncr) <= 0) {
+                        
+                        dir = Direction.SOUTHWEST;   // set direction/orientation SW
+                    }
+                    else {
+                        xloc-=xIncr;
+                        yloc-=yIncr;
+                    }
+                    break;
             }
-            else {
-                movementCounter++;
-            }
-        }
 
-        switch (dir) {
-
-            case NORTH:
-                if ((yloc-yIncr) <= 0) {
-                    dir = Direction.SOUTH;   // set direction/orientation S
-                }
-                else {
-                    yloc-=yIncr;
-                }
-                break;
-
-            // prev NE
-            case NORTHEAST:
-                if ((xloc+xIncr+imageWidth) >= screenWidth) {
-                    
-                    dir = Direction.NORTHWEST;   // set direction/orientation NW 
-                }
-                else if ((yloc-yIncr) <= 0) {
-                    
-                    dir = Direction.SOUTHEAST;   // set direction/orientation SE
-                }
-                else {
-                    xloc+=xIncr;
-                    yloc-=yIncr;
-                }
-                break;
-
-            // prev E
-            case EAST:
-                if ((xloc+xIncr+imageWidth) >= screenWidth) {
-                    
-                    dir = Direction.WEST;   // set direction/orientation W
-                }
-                else {
-                    xloc+=xIncr;
-                }
-                break;
-
-            // prev SE
-            case SOUTHEAST:
-                if ((xloc+xIncr+imageWidth) >= screenWidth) {
-                    
-                    dir = Direction.SOUTHWEST;   // set direction/orientation SW
-                }
-                else if ((yloc+yIncr+imageHeight) >= screenHeight) {
-                    
-                    dir = Direction.NORTHEAST;   // set direction/orientation NE
-                }
-                else {
-                    xloc+=xIncr;
-                    yloc+=yIncr;
-                }
-                break;
-
-            // prev S
-            case SOUTH:
-                if ((yloc+yIncr+imageHeight) >= screenHeight) {
-                    
-                    dir = Direction.NORTH;   // set direction/orientation N
-                }
-                else {
-                    yloc+=yIncr;
-                }
-                break;
-
-            // prev SW
-            case SOUTHWEST:
-                if ((xloc-xIncr) <= 0) {
-                    
-                    dir = Direction.SOUTHEAST;   // set direction/orientation SE
-                }
-                else if ((yloc+yIncr+imageHeight) >= screenHeight) {
-                    
-                    dir = Direction.NORTHWEST;   // set direction/orientation NW
-                }
-                else {
-                    xloc-=xIncr;
-                    yloc+=yIncr;
-                }
-                break;
-
-            // prev W
-            case WEST:
-                if ((xloc-xIncr) <= 0) {
-                    
-                    dir = Direction.EAST;   // set direction/orientation E
-                }
-                else {
-                    xloc-=xIncr;
-                }
-                break;
-
-            // prev NW
-            case NORTHWEST:
-                if ((xloc-xIncr) <= 0) {
-                    
-                    dir = Direction.NORTHEAST;   // set direction/orientation NE
-                }
-                else if ((yloc-yIncr) <= 0) {
-                    
-                    dir = Direction.SOUTHWEST;   // set direction/orientation SW
-                }
-                else {
-                    xloc-=xIncr;
-                    yloc-=yIncr;
-                }
-                break;
         }
     }
     
