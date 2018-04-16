@@ -49,6 +49,7 @@ class View extends JPanel {
     
     public View(){
         
+        // import all necessary images
     	runPics = new BufferedImage[imageCount][runFrameCount];
         
         int j = 0;
@@ -97,6 +98,7 @@ class View extends JPanel {
                     paused = !paused;
                     pauseButton.setText("PLAY");
                 }//else if
+                requestFocusInWindow();
             }//actionPerformed
         });//JButton pauseButton
 
@@ -104,9 +106,11 @@ class View extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e){
                     //Switching direction.
+                if (!paused) {
                     dir = dir.next();
-                    dirChange = true;
-                    requestFocusInWindow();
+                    dirChange = true;   
+                }
+                requestFocusInWindow();
             }//actionPerformed
         });//JButton dirButton
 
@@ -126,38 +130,57 @@ class View extends JPanel {
             public void keyPressed( KeyEvent e ) {
                 int key = e.getKeyCode();
 
-                switch (key) {
-                    case (KeyEvent.VK_LEFT):
-                        dir=Direction.WEST;
-                        dirChange = true;
-                        break;
-                    
-                    case (KeyEvent.VK_UP):
-                        dir=Direction.NORTH;
-                        dirChange = true;
-                        break;
+                // dont allow input if game is paused (other than unpausing)
+                if (!paused) {
+                    // direction keys
+                    switch (key) {
+                        case (KeyEvent.VK_LEFT):
+                            dir=Direction.WEST;
+                            dirChange = true;
+                            break;
+                        
+                        case (KeyEvent.VK_UP):
+                            dir=Direction.NORTH;
+                            dirChange = true;
+                            break;
 
-                    case (KeyEvent.VK_RIGHT):
-                        dir=Direction.EAST;
-                        dirChange = true;
-                        break;
+                        case (KeyEvent.VK_RIGHT):
+                            dir=Direction.EAST;
+                            dirChange = true;
+                            break;
 
-                   case (KeyEvent.VK_DOWN):
-                        dir=Direction.SOUTH;
-                        dirChange = true;
-                        break;
+                       case (KeyEvent.VK_DOWN):
+                            dir=Direction.SOUTH;
+                            dirChange = true;
+                            break;
+                    }
+
+                    // fire action
+                    if (key == KeyEvent.VK_F) {
+                        // do stuff
+                        movementType = Movement.FIRE;
+                        picNum = 0; 
+                        movChange = true;
+
+                    }
+
+                    // jump action
+                    else if (key == KeyEvent.VK_J) {
+                        // do stuff
+                        movementType = Movement.JUMP;
+                        picNum = 0;         // fixes double jump glitch
+                        movChange = true;
+                    }
                 }
-
-                if (key == KeyEvent.VK_F) {
-                    // do stuff
-                    movementType = Movement.FIRE; 
-                    movChange = true;
-
-                }
-                else if (key == KeyEvent.VK_J) {
-                    // do stuff
-                    movementType = Movement.JUMP;
-                    movChange = true;
+                // pause/unpause game
+                if (key == KeyEvent.VK_P) {
+                    if (paused) {
+                        pauseButton.setText("PAUSE");
+                    }
+                    else {
+                        pauseButton.setText("PLAY");
+                    }
+                    paused = !paused;
                 }
             }
 
